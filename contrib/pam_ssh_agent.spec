@@ -81,7 +81,7 @@ Provides:       bundled(crate(ssh-key+crypto)) = %{ssh_key}
 %else
 BuildRequires:  rust-ssh-key+default-devel
 BuildRequires:  rust-ssh-key+crypto-devel
-BuildRequires:  rust-num-bigint-dig+default-devel
+BuildRequires:  rust-num-bigint-dig-devel
 BuildRequires:  rust-p384-devel
 BuildRequires:  rust-rsa-devel
 BuildRequires:  rust-sha2-devel
@@ -147,7 +147,7 @@ BuildRequires:  rust-curve25519-dalek-devel
 Source19:       https://static.crates.io/crates/curve25519-dalek-derive/curve25519-dalek-derive-%{curve25519_dalek_derive}.crate
 Provides:       bundled(crate(curve25519-dalek-derive)) = %{curve25519_dalek_derive}
 %else
-BuildRequires:  rust-curve25519-dalek_derive-devel
+BuildRequires:  rust-curve25519-dalek-derive-devel
 %endif
 
 BuildRequires:  cargo-rpm-macros >= 26
@@ -169,7 +169,7 @@ BuildRequires:  rust-syslog+default-devel
 %autosetup -n pam-ssh-agent-%{version} -p1
 
 # built-in dependencies
-%if 0%{?b_pam_binding}
+%if 0%{?b_pam_bindings}
 %{__tar} xzf %{SOURCE10}
 %{__sed} -i 's/\(pam-bindings\) = .*/\1 = { path = "pam-bindings-%{pam_bindings}" }/' Cargo.toml
 %endif
