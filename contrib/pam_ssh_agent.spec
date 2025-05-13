@@ -8,13 +8,12 @@
 %global cargo_install_lib 0
 
 
-# define versions of built-in dependencies
-%if 0%{?fedora} <= 43 || 0%{?rhel} <= 10
+## define versions of built-in dependencies
+# Fedora <= 43 + EL <= 10
 %define         pam_bindings            0.1.1
 %define         ssh_agent_client_rs     0.9.1
-%endif
 
-%if 0%{?rhel} <= 10
+# EL <= 10
 %define         ssh_key                 0.6.5
 %define         ssh_encoding            0.2.0
 %define         ssh_cipher              0.2.0
@@ -23,6 +22,21 @@
 %define         curve25519_dalek_derive 0.1.1
 %define         p256                    0.13.2
 %define         p521                    0.13.3
+
+%if 0%{?fedora} <= 43 || 0%{?rhel} <= 10
+%define         b_pam_bindings            1
+%define         b_ssh_agent_client_rs     1
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} <= 10
+%define         b_ssh_key                 1
+%define         b_req_ssh_encoding        1
+%define         b_req_ssh_cipher          1
+%define         b_ed25519_dalek           1
+%define         b_curve25519_dalek        1
+%define         b_curve25519_dalek_derive 1
+%define         b_p256                    1
+%define         b_p521                    1
 %endif
 
 
@@ -41,7 +55,7 @@ BuildRequires:  pam-devel
 
 
 # built-in dependencies
-%if "%{pam_binding}" != ""
+%if 0%{?b_pam_bindings}
 %define         has_bundles 1
 Source10:       https://static.crates.io/crates/pam-bindings/pam-bindings-%{pam_bindings}.crate
 Provides:       bundled(crate(pam-binding+default)) = %{pam_bindings}
@@ -49,7 +63,7 @@ Provides:       bundled(crate(pam-binding+default)) = %{pam_bindings}
 BuildRequires:  rust-pam-bindings+default-devel
 %endif
 
-%if "%{ssh_agent_client_rs}" != ""
+%if 0%{?b_ssh_agent_client_rs}
 %define         has_bundles 1
 Source11:       https://static.crates.io/crates/ssh-agent-client-rs/ssh-agent-client-rs-%{ssh_agent_client_rs}.crate
 Provides:       bundled(crate(ssh-agent-client-rs+default)) = %{ssh_agent_client_rs}
@@ -59,7 +73,7 @@ BuildRequires:  rust-thiserror1-devel
 BuildRequires:  rust-ssh-agent-client-rs+default-devel
 %endif
 
-%if "%{ssh_key}" != ""
+%if 0%{?b_ssh_key}
 %define         has_bundles 1
 Source12:       https://static.crates.io/crates/ssh-key/ssh-key-%{ssh_key}.crate
 Provides:       bundled(crate(ssh-key+default)) = %{ssh_key}
@@ -74,7 +88,7 @@ BuildRequires:  rust-sha2-devel
 BuildRequires:  rust-cipher-devel
 %endif
 
-%if "%{ssh_encoding}" != ""
+%if 0%{?b_ssh_encoding}
 %define         has_bundles 1
 Source13:       https://static.crates.io/crates/ssh-encoding/ssh-encoding-%{ssh_encoding}.crate
 Provides:       bundled(crate(ssh-encoding+default)) = %{ssh_encoding}
@@ -83,7 +97,7 @@ BuildRequires:  rust-pem-rfc7468-devel
 BuildRequires:  rust-ssh-encoding+default-devel
 %endif
 
-%if "%{ssh_cipher}" != ""
+%if 0%{?b_ssh_cipher}
 %define         has_bundles 1
 Source14:       https://static.crates.io/crates/ssh-cipher/ssh-cipher-%{ssh_cipher}.crate
 Provides:       bundled(crate(ssh-cipher+default)) = %{ssh_cipher}
@@ -91,7 +105,7 @@ Provides:       bundled(crate(ssh-cipher+default)) = %{ssh_cipher}
 BuildRequires:  rust-ssh-cipher+default-devel
 %endif
 
-%if "%{ed25519_dalek}" != ""
+%if 0%{?b_ed25519_dalek}
 %define         has_bundles 1
 Source15:       https://static.crates.io/crates/ed25519-dalek/ed25519-dalek-%{ed25519_dalek}.crate
 Provides:       bundled(crate(ed25519-dalek)) = %{ed25519_dalek}
@@ -100,7 +114,7 @@ BuildRequires:  rust-ed25519-devel
 BuildRequires:  rust-ed25519-dalek-devel
 %endif
 
-%if "%{p256}" != ""
+%if 0%{?b_p256}
 %define         has_bundles 1
 Source16:       https://static.crates.io/crates/p256/p256-%{p256}.crate
 Provides:       bundled(crate(p256)) = %{p256}
@@ -110,7 +124,7 @@ BuildRequires:  rust-rfc6979-devel
 BuildRequires:  rust-p256-devel
 %endif
 
-%if "%{p521}" != ""
+%if 0%{?b_p521}
 %define         has_bundles 1
 Source17:       https://static.crates.io/crates/p521/p521-%{p521}.crate
 Provides:       bundled(crate(p521)) = %{p521}
@@ -118,7 +132,7 @@ Provides:       bundled(crate(p521)) = %{p521}
 BuildRequires:  rust-p521-devel
 %endif
 
-%if "%{curve25519_dalek}" != ""
+%if 0%{?b_curve25519_dalek}
 %define         has_bundles 1
 Source18:       https://static.crates.io/crates/curve25519-dalek/curve25519-dalek-%{curve25519_dalek}.crate
 Provides:       bundled(crate(curve25519-dalek)) = %{curve25519_dalek}
@@ -128,7 +142,7 @@ BuildRequires:  rust-fiat-crypto-devel
 BuildRequires:  rust-curve25519-dalek-devel
 %endif
 
-%if "%{curve25519_dalek_derive}" != ""
+%if 0%{?b_curve25519_dalek_derive}
 %define         has_bundles 1
 Source19:       https://static.crates.io/crates/curve25519-dalek-derive/curve25519-dalek-derive-%{curve25519_dalek_derive}.crate
 Provides:       bundled(crate(curve25519-dalek-derive)) = %{curve25519_dalek_derive}
@@ -155,55 +169,55 @@ BuildRequires:  rust-syslog+default-devel
 %autosetup -n pam-ssh-agent-%{version} -p1
 
 # built-in dependencies
-%if "%{pam_binding}" != ""
+%if 0%{?b_pam_binding}
 %{__tar} xzf %{SOURCE10}
 %{__sed} -i 's/\(pam-bindings\) = .*/\1 = { path = "pam-bindings-%{pam_bindings}" }/' Cargo.toml
 %endif
 
-%if "%{ssh_agent_client_rs}" != ""
+%if 0%{?b_ssh_agent_client_rs}
 %{__tar} xzf %{SOURCE11}
 %{__sed} -i 's/\(ssh-agent-client-rs\) = .*/\1 = { path = "ssh-agent-client-rs-%{ssh_agent_client_rs}" }/' Cargo.toml
 %endif
 
-%if "%{ssh_key}" != ""
+%if 0%{?b_ssh_key}
 %{__tar} xzf %{SOURCE12}
 %{__sed} -i 's/\(ssh-key\) = .*/\1 = { path = "ssh-key-%{ssh_key}", features = ["crypto"] }/' Cargo.toml
 %{__sed} -i 's/\(dependencies.ssh-key\]\)/\1\npath = "..\/ssh-key-%{ssh_key}"/' ssh-agent-client-rs-%{ssh_agent_client_rs}/Cargo.toml
 %endif
 
-%if "%{ed25519_dalek}" != ""
+%if 0%{?b_ed25519_dalek}
 %{__tar} xzf %{SOURCE15}
 %{__sed} -i 's/\(dependencies.ed25519-dalek\]\)/\1\npath = "..\/ed25519-dalek-%{ed25519_dalek}"/' ssh-key-%{ssh_key}/Cargo.toml
 %endif
 
-%if "%{ssh_cipher}" != ""
+%if 0%{?b_ssh_cipher}
 %{__tar} xzf %{SOURCE14}
 %{__sed} -i 's/\(dependencies.cipher\]\)/\1\npath = "..\/ssh-cipher-%{ssh_cipher}"/' ssh-key-%{ssh_key}/Cargo.toml
 %endif
 
-%if "%{ssh_encoding}" != ""
+%if 0%{?b_ssh_encoding}
 %{__tar} xzf %{SOURCE13}
 %{__sed} -i 's/\(dependencies.ssh-encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-agent-client-rs-%{ssh_agent_client_rs}/Cargo.toml
 %{__sed} -i 's/\(dependencies.encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-key-%{ssh_key}/Cargo.toml
 %{__sed} -i 's/\(dependencies.encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-cipher-%{ssh_cipher}/Cargo.toml
 %endif
 
-%if "%{p256}" != ""
+%if 0%{?b_p256}
 %{__tar} xzf %{SOURCE16}
 %{__sed} -i 's/\(dependencies.p256\]\)/\1\npath = "..\/p256-%{p256}"/' ssh-key-%{ssh_key}/Cargo.toml
 %endif
 
-%if "%{p521}" != ""
+%if 0%{?b_p521}
 %{__tar} xzf %{SOURCE17}
 %{__sed} -i 's/\(dependencies.p521\]\)/\1\npath = "..\/p521-%{p521}"/' ssh-key-%{ssh_key}/Cargo.toml
 %endif
 
-%if "%{curve25519_dalek}" != ""
+%if 0%{?b_curve25519_dalek}
 %{__tar} xzf %{SOURCE18}
 %{__sed} -i 's/\(dependencies.curve25519-dalek\]\)/\1\npath = "..\/curve25519-dalek-%{curve25519_dalek}"/' ed25519-dalek-%{ed25519_dalek}/Cargo.toml
 %endif
 
-%if "%{curve25519_dalek_derive}" != ""
+%if 0%{?b_curve25519_dalek_derive}
 %{__tar} xzf %{SOURCE19}
 %{__sed} -i 's/\(dependencies.curve25519-dalek-derive\]\)/\1\npath = "..\/curve25519-dalek-derive-%{curve25519_dalek_derive}"/' curve25519-dalek-%{curve25519_dalek}/Cargo.toml
 %endif
