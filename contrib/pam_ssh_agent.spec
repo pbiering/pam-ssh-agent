@@ -78,14 +78,14 @@ BuildRequires:  rust-ssh-agent-client-rs+default-devel
 Source12:       https://static.crates.io/crates/ssh-key/ssh-key-%{ssh_key}.crate
 Provides:       bundled(crate(ssh-key+default)) = %{ssh_key}
 Provides:       bundled(crate(ssh-key+crypto)) = %{ssh_key}
-%else
-BuildRequires:  rust-ssh-key+default-devel
-BuildRequires:  rust-ssh-key+crypto-devel
 BuildRequires:  rust-num-bigint-dig-devel
 BuildRequires:  rust-p384-devel
 BuildRequires:  rust-rsa-devel
 BuildRequires:  rust-sha2-devel
 BuildRequires:  rust-cipher-devel
+%else
+BuildRequires:  rust-ssh-key+default-devel
+BuildRequires:  rust-ssh-key+crypto-devel
 %endif
 
 %if 0%{?b_ssh_encoding}
