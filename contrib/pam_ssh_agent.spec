@@ -30,8 +30,8 @@
 
 %if 0%{?rhel} && 0%{?rhel} <= 10
 %define         b_ssh_key                 1
-%define         b_req_ssh_encoding        1
-%define         b_req_ssh_cipher          1
+%define         b_ssh_encoding            1
+%define         b_ssh_cipher              1
 %define         b_ed25519_dalek           1
 %define         b_curve25519_dalek        1
 %define         b_curve25519_dalek_derive 1
