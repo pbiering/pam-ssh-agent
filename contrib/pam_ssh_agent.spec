@@ -42,7 +42,7 @@
 
 Name:           pam_ssh_agent
 Version:        0.5.1
-Release:        2
+Release:        3
 Summary:        PAM module for ssh-agent based authentication
 
 SourceLicense:  MIT
@@ -254,6 +254,9 @@ install -m 755 target/release/libpam_ssh_agent.so %{buildroot}%{_libdir}/securit
 
 
 %changelog
+* Thu May 15 2025 Peter Bieringer <pb@bieringer.de> - 0.5.1-3
+- Unconditionally package all sources to avoid issues with copr builds
+
 * Tue May 13 2025 Peter Bieringer <pb@bieringer.de> - 0.5.1-2
 - Add support for EL10 by conditional bundling of ssh_key=0.6.5 ssh-encoding=0.2.0 ssh-cipher=0.2.0 ed25519-dalek=2.1.1 curve25519-dalek=4.1.3 curve25519-dalek-derive=0.1.1 p256=0.13.2 p521=0.13.3
 
