@@ -53,11 +53,20 @@ Source0:        https://github.com/nresare/pam-ssh-agent/archive/v%{version}/%{n
 
 BuildRequires:  pam-devel
 
+Source10:       https://static.crates.io/crates/pam-bindings/pam-bindings-%{pam_bindings}.crate
+Source11:       https://static.crates.io/crates/ssh-agent-client-rs/ssh-agent-client-rs-%{ssh_agent_client_rs}.crate
+Source12:       https://static.crates.io/crates/ssh-key/ssh-key-%{ssh_key}.crate
+Source13:       https://static.crates.io/crates/ssh-encoding/ssh-encoding-%{ssh_encoding}.crate
+Source14:       https://static.crates.io/crates/ssh-cipher/ssh-cipher-%{ssh_cipher}.crate
+Source15:       https://static.crates.io/crates/ed25519-dalek/ed25519-dalek-%{ed25519_dalek}.crate
+Source16:       https://static.crates.io/crates/p256/p256-%{p256}.crate
+Source17:       https://static.crates.io/crates/p521/p521-%{p521}.crate
+Source18:       https://static.crates.io/crates/curve25519-dalek/curve25519-dalek-%{curve25519_dalek}.crate
+Source19:       https://static.crates.io/crates/curve25519-dalek-derive/curve25519-dalek-derive-%{curve25519_dalek_derive}.crate
 
 # built-in dependencies
 %if 0%{?b_pam_bindings}
 %define         has_bundles 1
-Source10:       https://static.crates.io/crates/pam-bindings/pam-bindings-%{pam_bindings}.crate
 Provides:       bundled(crate(pam-binding+default)) = %{pam_bindings}
 %else
 BuildRequires:  rust-pam-bindings+default-devel
@@ -65,7 +74,6 @@ BuildRequires:  rust-pam-bindings+default-devel
 
 %if 0%{?b_ssh_agent_client_rs}
 %define         has_bundles 1
-Source11:       https://static.crates.io/crates/ssh-agent-client-rs/ssh-agent-client-rs-%{ssh_agent_client_rs}.crate
 Provides:       bundled(crate(ssh-agent-client-rs+default)) = %{ssh_agent_client_rs}
 BuildRequires:  rust-bytes-devel
 BuildRequires:  rust-thiserror1-devel
@@ -75,7 +83,6 @@ BuildRequires:  rust-ssh-agent-client-rs+default-devel
 
 %if 0%{?b_ssh_key}
 %define         has_bundles 1
-Source12:       https://static.crates.io/crates/ssh-key/ssh-key-%{ssh_key}.crate
 Provides:       bundled(crate(ssh-key+default)) = %{ssh_key}
 Provides:       bundled(crate(ssh-key+crypto)) = %{ssh_key}
 BuildRequires:  rust-num-bigint-dig-devel
@@ -90,7 +97,6 @@ BuildRequires:  rust-ssh-key+crypto-devel
 
 %if 0%{?b_ssh_encoding}
 %define         has_bundles 1
-Source13:       https://static.crates.io/crates/ssh-encoding/ssh-encoding-%{ssh_encoding}.crate
 Provides:       bundled(crate(ssh-encoding+default)) = %{ssh_encoding}
 BuildRequires:  rust-pem-rfc7468-devel
 %else
@@ -99,7 +105,6 @@ BuildRequires:  rust-ssh-encoding+default-devel
 
 %if 0%{?b_ssh_cipher}
 %define         has_bundles 1
-Source14:       https://static.crates.io/crates/ssh-cipher/ssh-cipher-%{ssh_cipher}.crate
 Provides:       bundled(crate(ssh-cipher+default)) = %{ssh_cipher}
 %else
 BuildRequires:  rust-ssh-cipher+default-devel
@@ -107,7 +112,6 @@ BuildRequires:  rust-ssh-cipher+default-devel
 
 %if 0%{?b_ed25519_dalek}
 %define         has_bundles 1
-Source15:       https://static.crates.io/crates/ed25519-dalek/ed25519-dalek-%{ed25519_dalek}.crate
 Provides:       bundled(crate(ed25519-dalek)) = %{ed25519_dalek}
 BuildRequires:  rust-ed25519-devel
 %else
@@ -116,7 +120,6 @@ BuildRequires:  rust-ed25519-dalek-devel
 
 %if 0%{?b_p256}
 %define         has_bundles 1
-Source16:       https://static.crates.io/crates/p256/p256-%{p256}.crate
 Provides:       bundled(crate(p256)) = %{p256}
 BuildRequires:  rust-ecdsa-devel
 BuildRequires:  rust-rfc6979-devel
@@ -126,7 +129,6 @@ BuildRequires:  rust-p256-devel
 
 %if 0%{?b_p521}
 %define         has_bundles 1
-Source17:       https://static.crates.io/crates/p521/p521-%{p521}.crate
 Provides:       bundled(crate(p521)) = %{p521}
 %else
 BuildRequires:  rust-p521-devel
@@ -134,7 +136,6 @@ BuildRequires:  rust-p521-devel
 
 %if 0%{?b_curve25519_dalek}
 %define         has_bundles 1
-Source18:       https://static.crates.io/crates/curve25519-dalek/curve25519-dalek-%{curve25519_dalek}.crate
 Provides:       bundled(crate(curve25519-dalek)) = %{curve25519_dalek}
 BuildRequires:  rust-rustc_version-devel
 BuildRequires:  rust-fiat-crypto-devel
@@ -144,7 +145,6 @@ BuildRequires:  rust-curve25519-dalek-devel
 
 %if 0%{?b_curve25519_dalek_derive}
 %define         has_bundles 1
-Source19:       https://static.crates.io/crates/curve25519-dalek-derive/curve25519-dalek-derive-%{curve25519_dalek_derive}.crate
 Provides:       bundled(crate(curve25519-dalek-derive)) = %{curve25519_dalek_derive}
 %else
 BuildRequires:  rust-curve25519-dalek-derive-devel
