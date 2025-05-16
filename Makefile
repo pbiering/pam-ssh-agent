@@ -17,4 +17,4 @@ check:
 
 srpm:
 	echo "BUILD: create SRPM like COPR is doing"
-	make -f ./.copr/Makefile srpm spec="contrib/pam_ssh_agent.spec"
+	make -f ./.copr/Makefile srpm spec="pam_ssh_agent.spec"
