@@ -1,10 +1,13 @@
 rpmdev-spectool:
-	if rpm -q rpmdevtools; then echo "RPM rpmdevtools is already installed"; else echo "RPM rpmdevtools need to be installed first"; dnf install -y rpmdevtools; fi
+	if rpm -q rpmdevtools; then echo "RPM 'rpmdevtools' is already installed"; else echo "RPM 'rpmdevtools' need to be installed first"; dnf install -y rpmdevtools; fi
+
+cargo:
+	if rpm -q cargo; then echo "RPM 'cargo' is already installed"; else echo "RPM 'cargo' need to be installed first"; dnf install -y cargo; fi
 
 download: rpmdev-spectool
 	rpmdev-spectool $(spec) -g
 
-cargovendor: rpmdev-spectool
+cargovendor: rpmdev-spectool cargo
 	# retrieve package and version
 	# extract toml+lock
 	# cleanup vendor directory
