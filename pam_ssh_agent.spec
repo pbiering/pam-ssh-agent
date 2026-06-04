@@ -45,43 +45,8 @@
 # prevent library files from being installed
 %global cargo_install_lib 0
 
-
-## define versions of built-in dependencies
-# Fedora <= 43 + EL <= 10
-%define         pam_bindings            0.1.1
-%define         ssh_agent_client_rs     1.0.0
-%define         uzers                   0.12.1
-
-# EL <= 10
-%define         ssh_key                 0.6.7
-%define         ssh_encoding            0.2.0
-%define         ssh_cipher              0.2.0
-%define         ed25519_dalek           2.1.1
-%define         curve25519_dalek        4.1.3
-%define         curve25519_dalek_derive 0.1.1
-%define         p256                    0.13.2
-%define         p521                    0.13.3
-
-%if 0%{?fedora} <= 43 || 0%{?rhel} <= 10
-%define         b_pam_bindings            1
-%define         b_ssh_agent_client_rs     1
-%endif
-
-%if 0%{?rhel} && 0%{?rhel} <= 10
-%define         b_ssh_key                 1
-%define         b_ssh_encoding            1
-%define         b_ssh_cipher              1
-%define         b_ed25519_dalek           1
-%define         b_curve25519_dalek        1
-%define         b_curve25519_dalek_derive 1
-%define         b_p256                    1
-%define         b_p521                    1
-%define         b_uzers                   1
-%endif
-
-
 Name:           pam_ssh_agent
-Version:        0.9.0
+Version:        0.9.5
 Release:        1%{?gittag}%{?dist}
 Summary:        PAM module for ssh-agent based authentication
 
@@ -96,121 +61,9 @@ Source0:        https://github.com/nresare/pam-ssh-agent/archive/v%{version}/%{n
 %endif
 
 BuildRequires:  pam-devel
-
-Source10:       https://static.crates.io/crates/pam-bindings/pam-bindings-%{pam_bindings}.crate
-Source11:       https://static.crates.io/crates/ssh-agent-client-rs/ssh-agent-client-rs-%{ssh_agent_client_rs}.crate
-Source12:       https://static.crates.io/crates/ssh-key/ssh-key-%{ssh_key}.crate
-Source13:       https://static.crates.io/crates/ssh-encoding/ssh-encoding-%{ssh_encoding}.crate
-Source14:       https://static.crates.io/crates/ssh-cipher/ssh-cipher-%{ssh_cipher}.crate
-Source15:       https://static.crates.io/crates/ed25519-dalek/ed25519-dalek-%{ed25519_dalek}.crate
-Source16:       https://static.crates.io/crates/p256/p256-%{p256}.crate
-Source17:       https://static.crates.io/crates/p521/p521-%{p521}.crate
-Source18:       https://static.crates.io/crates/curve25519-dalek/curve25519-dalek-%{curve25519_dalek}.crate
-Source19:       https://static.crates.io/crates/curve25519-dalek-derive/curve25519-dalek-derive-%{curve25519_dalek_derive}.crate
-Source22:       https://static.crates.io/crates/uzers/uzers-%{uzers}.crate
-
-# built-in dependencies
-%if 0%{?b_pam_bindings}
-%define         has_bundles 1
-Provides:       bundled(crate(pam-binding+default)) = %{pam_bindings}
-%else
-BuildRequires:  rust-pam-bindings+default-devel
-%endif
-
-%if 0%{?b_ssh_agent_client_rs}
-%define         has_bundles 1
-Provides:       bundled(crate(ssh-agent-client-rs+default)) = %{ssh_agent_client_rs}
-BuildRequires:  rust-bytes-devel
-BuildRequires:  rust-thiserror-devel
-%else
-BuildRequires:  rust-ssh-agent-client-rs+default-devel
-%endif
-
-%if 0%{?b_ssh_key}
-%define         has_bundles 1
-Provides:       bundled(crate(ssh-key+default)) = %{ssh_key}
-Provides:       bundled(crate(ssh-key+crypto)) = %{ssh_key}
-BuildRequires:  rust-num-bigint-dig-devel
-BuildRequires:  rust-p384-devel
-BuildRequires:  rust-rsa-devel
-BuildRequires:  rust-sha2-devel
-BuildRequires:  rust-cipher-devel
-%else
-BuildRequires:  rust-ssh-key+default-devel >= %{ssh_key}
-BuildRequires:  rust-ssh-key+crypto-devel >= %{ssh_key}
-%endif
-
-%if 0%{?b_ssh_encoding}
-%define         has_bundles 1
-Provides:       bundled(crate(ssh-encoding+default)) = %{ssh_encoding}
-BuildRequires:  rust-pem-rfc7468-devel
-%else
-BuildRequires:  rust-ssh-encoding+default-devel
-%endif
-
-%if 0%{?b_ssh_cipher}
-%define         has_bundles 1
-Provides:       bundled(crate(ssh-cipher+default)) = %{ssh_cipher}
-%else
-BuildRequires:  rust-ssh-cipher+default-devel
-%endif
-
-%if 0%{?b_ed25519_dalek}
-%define         has_bundles 1
-Provides:       bundled(crate(ed25519-dalek)) = %{ed25519_dalek}
-BuildRequires:  rust-ed25519-devel
-%else
-BuildRequires:  rust-ed25519-dalek-devel
-%endif
-
-%if 0%{?b_p256}
-%define         has_bundles 1
-Provides:       bundled(crate(p256)) = %{p256}
-BuildRequires:  rust-ecdsa-devel
-BuildRequires:  rust-rfc6979-devel
-%else
-BuildRequires:  rust-p256-devel
-%endif
-
-%if 0%{?b_p521}
-%define         has_bundles 1
-Provides:       bundled(crate(p521)) = %{p521}
-%else
-BuildRequires:  rust-p521-devel
-%endif
-
-%if 0%{?b_curve25519_dalek}
-%define         has_bundles 1
-Provides:       bundled(crate(curve25519-dalek)) = %{curve25519_dalek}
-BuildRequires:  rust-rustc_version-devel
-BuildRequires:  rust-fiat-crypto-devel
-%else
-BuildRequires:  rust-curve25519-dalek-devel
-%endif
-
-%if 0%{?b_curve25519_dalek_derive}
-%define         has_bundles 1
-Provides:       bundled(crate(curve25519-dalek-derive)) = %{curve25519_dalek_derive}
-%else
-BuildRequires:  rust-curve25519-dalek-derive-devel
-%endif
-
-%if 0%{?b_uzers}
-%define         has_bundles 1
-Provides:       bundled(crate(uzers)) = %{uzers}
-%else
-BuildRequires:  rust-uzers-devel
-%endif
+Source1:        vendor-%{name}-%{version}.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 26
-
-## from Cargo.toml
-BuildRequires:  rust-anyhow+default-devel
-BuildRequires:  rust-getrandom0.2+default-devel
-BuildRequires:  rust-signature+default-devel
-BuildRequires:  rust-syslog-devel
-BuildRequires:  rust-getrandom-devel
-
 
 %global _description %{expand:
 %{summary}.}
@@ -222,83 +75,23 @@ BuildRequires:  rust-getrandom-devel
 %if 0%{?gitcommit:1}
 %autosetup -n pam-ssh-agent-%{gitcommit}
 %else
-%autosetup -n pam-ssh-agent-%{version} -p1
+%autosetup -n pam-ssh-agent-%{version} -p1 -a1
 %endif
 
-# built-in dependencies
-%if 0%{?b_pam_bindings}
-%{__tar} xzf %{SOURCE10}
-%{__sed} -i 's/\(pam-bindings\) = .*/\1 = { path = "pam-bindings-%{pam_bindings}" }/' Cargo.toml
-%endif
-
-%if 0%{?b_ssh_agent_client_rs}
-%{__tar} xzf %{SOURCE11}
-%{__sed} -i 's/\(ssh-agent-client-rs\) = .*/\1 = { path = "ssh-agent-client-rs-%{ssh_agent_client_rs}" }/' Cargo.toml
-# remove "windows" related interprocess dependency
-%{__sed} -i -e '/dependencies.interprocess/,+2d' ssh-agent-client-rs-%{ssh_agent_client_rs}/Cargo.toml
-%endif
-
-%if 0%{?b_ssh_key}
-%{__tar} xzf %{SOURCE12}
-%{__sed} -i 's/\(ssh-key\) = .*/\1 = { path = "ssh-key-%{ssh_key}", features = ["crypto"] }/' Cargo.toml
-%{__sed} -i 's/\(dependencies.ssh-key\]\)/\1\npath = "..\/ssh-key-%{ssh_key}"/' ssh-agent-client-rs-%{ssh_agent_client_rs}/Cargo.toml
-%endif
-
-%if 0%{?b_ed25519_dalek}
-%{__tar} xzf %{SOURCE15}
-%{__sed} -i 's/\(dependencies.ed25519-dalek\]\)/\1\npath = "..\/ed25519-dalek-%{ed25519_dalek}"/' ssh-key-%{ssh_key}/Cargo.toml
-%endif
-
-%if 0%{?b_ssh_cipher}
-%{__tar} xzf %{SOURCE14}
-%{__sed} -i 's/\(dependencies.cipher\]\)/\1\npath = "..\/ssh-cipher-%{ssh_cipher}"/' ssh-key-%{ssh_key}/Cargo.toml
-%endif
-
-%if 0%{?b_ssh_encoding}
-%{__tar} xzf %{SOURCE13}
-%{__sed} -i 's/\(dependencies.ssh-encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-agent-client-rs-%{ssh_agent_client_rs}/Cargo.toml
-%{__sed} -i 's/\(dependencies.encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-key-%{ssh_key}/Cargo.toml
-%{__sed} -i 's/\(dependencies.encoding\]\)/\1\npath = "..\/ssh-encoding-%{ssh_encoding}"/' ssh-cipher-%{ssh_cipher}/Cargo.toml
-%endif
-
-%if 0%{?b_p256}
-%{__tar} xzf %{SOURCE16}
-%{__sed} -i 's/\(dependencies.p256\]\)/\1\npath = "..\/p256-%{p256}"/' ssh-key-%{ssh_key}/Cargo.toml
-%endif
-
-%if 0%{?b_p521}
-%{__tar} xzf %{SOURCE17}
-%{__sed} -i 's/\(dependencies.p521\]\)/\1\npath = "..\/p521-%{p521}"/' ssh-key-%{ssh_key}/Cargo.toml
-%endif
-
-%if 0%{?b_curve25519_dalek}
-%{__tar} xzf %{SOURCE18}
-%{__sed} -i 's/\(dependencies.curve25519-dalek\]\)/\1\npath = "..\/curve25519-dalek-%{curve25519_dalek}"/' ed25519-dalek-%{ed25519_dalek}/Cargo.toml
-%endif
-
-%if 0%{?b_curve25519_dalek_derive}
-%{__tar} xzf %{SOURCE19}
-%{__sed} -i 's/\(dependencies.curve25519-dalek-derive\]\)/\1\npath = "..\/curve25519-dalek-derive-%{curve25519_dalek_derive}"/' curve25519-dalek-%{curve25519_dalek}/Cargo.toml
-%endif
-
-%if 0%{?b_uzers}
-%{__tar} xzf %{SOURCE22}
-%{__sed} -i 's/\(uzers\) = .*/\1 = { path = "uzers-%{uzers}" }/' Cargo.toml
-%endif
-
-%cargo_prep
+%cargo_prep -v vendor
 
 
 %generate_buildrequires
-%if 0%{has_bundles}
-%else
-%cargo_generate_buildrequires
-%endif
+# everything is bundled in vendor package
+#cargo_generate_buildrequires -t
 
 
 %build
 %cargo_build
-%{cargo_license_summary}
+%cargo_license_summary
+%cargo_license > LICENSE.dependencies
+
+%cargo_vendor_manifest
 
 
 %install
@@ -316,6 +109,10 @@ install -m 755 target/release/libpam_ssh_agent.so %{buildroot}%{_libdir}/securit
 
 
 %changelog
+* Thu Jun 04 2026 Peter Bieringer <pb@bieringer.de> - 0.9.5-1
+- Upstream 0.9.0
+- Bundle complete vendor instead of only really required ones
+
 * Thu May 15 2025 Peter Bieringer <pb@bieringer.de> - 0.9.0-1
 - Upstream 0.9.0
 - Update bundled ssh_agent_client_rs 0.9.1->1.0.0
